@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.clean.common.SportEvent
 import com.example.clean.databinding.ActivityMainBinding
-import com.example.clean.mainModel.presenter.MainPresenter
+import com.example.clean.mainModel.presenter.MainPresenterImpl
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ResultAdapter
-    private lateinit var presenter: MainPresenter
+    private lateinit var presenter: MainPresenterImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             insets
         }
 
-        presenter = MainPresenter(this)
+        presenter = MainPresenterImpl(this)
         presenter.onCreate()
         setupAdapter()
         setupRecyclerView()
