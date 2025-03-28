@@ -11,16 +11,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.clean.common.SportEvent
 import com.example.clean.databinding.ActivityMainBinding
+import com.example.clean.mainModel.model.DataSourceImpl
+import com.example.clean.mainModel.model.MainRepositoryImpl
+import com.example.clean.mainModel.presenter.MainPresenter
 import com.example.clean.mainModel.presenter.MainPresenterImpl
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, MainView {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ResultAdapter
-    private lateinit var presenter: MainPresenterImpl
+    private lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             insets
         }
 
-        presenter = MainPresenterImpl(this)
+        presenter = MainPresenterImpl(this, MainRepositoryImpl(DataSourceImpl()))
         presenter.onCreate()
         setupAdapter()
         setupRecyclerView()
@@ -94,27 +97,27 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     //View layer
-    fun add(event: SportEvent.ResultSuccess) {
+    override fun add(event: SportEvent.ResultSuccess) {
         adapter.add(event)
     }
 
-    fun clearAdapter() {
+    override fun clearAdapter() {
         adapter.clear()
     }
 
-    suspend fun showAdUI(isVisible: Boolean) = withContext(Dispatchers.Main) {
+    override suspend fun showAdUI(isVisible: Boolean) = withContext(Dispatchers.Main) {
         binding.btnAd.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    fun showProgress(isVisible: Boolean) {
+    override fun showProgress(isVisible: Boolean) {
         binding.srlResults.isRefreshing = isVisible
     }
 
-    suspend fun showToast(msg: String) = withContext(Dispatchers.Main) {
+    override suspend fun showToast(msg: String) = withContext(Dispatchers.Main) {
         Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
     }
 
-    fun showSnackbar(msg: String) {
+    override fun showSnackbar(msg: String) {
         Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
     }
 }

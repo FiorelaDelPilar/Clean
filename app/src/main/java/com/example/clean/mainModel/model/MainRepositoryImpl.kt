@@ -7,30 +7,34 @@ import com.example.clean.common.getResultEventsInRealtime
 import com.example.clean.common.someTime
 import kotlinx.coroutines.delay
 
-class MainRepositoryImpl {
-    suspend fun getEvents() {
-        val events = getResultEventsInRealtime()
+class MainRepositoryImpl(private val ds: DataSource) : MainRepository {
+    override suspend fun getEvents() {
+        val events = ds.getAllEvents()
         events.forEach { event ->
             delay(someTime())
             publishEvent(event)
         }
     }
 
-    suspend fun saveResult(result: SportEvent.ResultSuccess) {
-        val response = if (result.isWarning)
+    override suspend fun saveResult(result: SportEvent.ResultSuccess) {
+        /*val response = if (result.isWarning)
             SportEvent.ResultError(30, "Error al guardar.")
         else SportEvent.SaveEvent
+         */
+        val response = ds.save(result)
         publishEvent(response)
+
     }
 
-    suspend fun registerAd() {
-        val events = getAdEventsInRealtime()
-        publishEvent(events.first())
+    override suspend fun registerAd() {
+        //val events = getAdEventsInRealtime().first()
+        val event = ds.registerAd()
+        publishEvent(event)
     }
 
-    suspend fun closeAd() {
+    /*override suspend fun closeAd() {
         publishEvent(SportEvent.ClosedAdEvent)
-    }
+    }*/
 
     private suspend fun publishEvent(event: SportEvent) {
         EventBus.instance().publish(event)

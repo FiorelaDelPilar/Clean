@@ -5,46 +5,50 @@ import com.example.clean.common.EventBus
 import com.example.clean.common.SportEvent
 import com.example.clean.mainModel.model.MainRepositoryImpl
 import com.example.clean.mainModel.view.MainActivity
+import com.example.clean.mainModel.view.MainView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class MainPresenterImpl(private val view: MainActivity) {
-    private val repository = MainRepositoryImpl()
+class MainPresenterImpl(
+    private val view: MainView, private val repository: MainRepositoryImpl
+) :
+    MainPresenter {
     private lateinit var viewScope: CoroutineScope
 
-    fun onCreate() {
+    override fun onCreate() {
         viewScope = CoroutineScope(Dispatchers.IO + Job())
         onEvent()
     }
 
-    suspend fun refresh() {
+    override suspend fun refresh() {
         view.clearAdapter()
         getEvents()
         view.showAdUI(true)
     }
 
-    suspend fun getEvents() {
+    override suspend fun getEvents() {
         view.showProgress(true)
         repository.getEvents()
     }
 
-    suspend fun registerAd() {
+    override suspend fun registerAd() {
         repository.registerAd()
     }
 
-    suspend fun closeAd() {
-        repository.closeAd()
+    override suspend fun closeAd() {
+        view.showAdUI(false)
+        Log.i("DEV:::", "Ad was closed. Send data to server")
     }
 
-    suspend fun saveResult(result: SportEvent.ResultSuccess) {
+    override suspend fun saveResult(result: SportEvent.ResultSuccess) {
         //view.showProgress(true) => Curiosamente esto genera un punto blanco veloz al dar click a los items si es que se descomenta
         repository.saveResult(result)
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
         viewScope.cancel()
     }
 
@@ -65,11 +69,6 @@ class MainPresenterImpl(private val view: MainActivity) {
 
                         is SportEvent.AdEvent -> {
                             view.showToast("Ad click. Send data to server---")
-                        }
-
-                        is SportEvent.ClosedAdEvent -> {
-                            view.showAdUI(false)
-                            Log.i("DEV:::", "Ad was closed. Send data to server")
                         }
 
                         is SportEvent.SaveEvent -> {
