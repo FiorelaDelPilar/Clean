@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainView {
                     lifecycleScope.launch { presenter.registerAd() }
                 }
             }
-            setOnLongClickListener { view ->
+            setOnLongClickListener {
                 lifecycleScope.launch {
                     lifecycleScope.launch { presenter.closeAd() }
                 }
