@@ -36,6 +36,7 @@ android {
     viewBinding { enable = true }
 }
 
+val koinVersion = "3.5.3"
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -45,7 +46,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-
+    implementation("io.insert-koin:koin-android:$koinVersion")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
