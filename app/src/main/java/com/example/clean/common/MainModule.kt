@@ -1,5 +1,12 @@
 package com.example.clean.common
 
+import com.example.clean.mainModel.model.DataSource
+import com.example.clean.mainModel.model.DataSourceImpl
+import com.example.clean.mainModel.model.MainRepository
+import com.example.clean.mainModel.model.MainRepositoryImpl
+import com.example.clean.mainModel.presenter.MainPresenter
+import com.example.clean.mainModel.presenter.MainPresenterImpl
+import com.example.clean.mainModel.view.MainView
 import com.example.clean.mainModel.view.OnClickListener
 import com.example.clean.mainModel.view.ResultAdapter
 import org.koin.dsl.module
@@ -18,7 +25,13 @@ import org.koin.dsl.module
  * que factory va crear las instancias siempre que se reqieran de forma separada y siempre que se requieran
  */
 
+fun provideMainRepository(dataSource: DataSource): MainRepository = MainRepositoryImpl(dataSource)
+fun provideDataSource(): DataSource = DataSourceImpl()
 
 val mainModule = module {
     factory<ResultAdapter> { (listener: OnClickListener) -> ResultAdapter(listener) }
+
+    single { provideDataSource() }
+    single { provideMainRepository(get()) }
+    factory<MainPresenter> { (view: MainView) -> MainPresenterImpl(view, get()) }
 }

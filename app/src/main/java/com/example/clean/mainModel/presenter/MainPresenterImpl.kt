@@ -3,8 +3,7 @@ package com.example.clean.mainModel.presenter
 import android.util.Log
 import com.example.clean.common.EventBus
 import com.example.clean.common.SportEvent
-import com.example.clean.mainModel.model.MainRepositoryImpl
-import com.example.clean.mainModel.view.MainActivity
+import com.example.clean.mainModel.model.MainRepository
 import com.example.clean.mainModel.view.MainView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +12,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class MainPresenterImpl(
-    private val view: MainView, private val repository: MainRepositoryImpl
+    private val view: MainView, private val repository: MainRepository
 ) :
     MainPresenter {
     private lateinit var viewScope: CoroutineScope

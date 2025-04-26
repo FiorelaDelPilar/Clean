@@ -11,10 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.clean.common.SportEvent
 import com.example.clean.databinding.ActivityMainBinding
-import com.example.clean.mainModel.model.DataSourceImpl
-import com.example.clean.mainModel.model.MainRepositoryImpl
 import com.example.clean.mainModel.presenter.MainPresenter
-import com.example.clean.mainModel.presenter.MainPresenterImpl
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,10 +21,8 @@ import org.koin.core.parameter.parametersOf
 
 class MainActivity : AppCompatActivity(), OnClickListener, MainView {
     private lateinit var binding: ActivityMainBinding
-
-    //private lateinit var adapter: ResultAdapter
     private val adapter: ResultAdapter by inject { parametersOf(this) }
-    private lateinit var presenter: MainPresenter
+    private val presenter: MainPresenter by inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +36,10 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainView {
             insets
         }
 
-        presenter = MainPresenterImpl(this, MainRepositoryImpl(DataSourceImpl()))
         presenter.onCreate()
-        setupAdapter()
         setupRecyclerView()
         setupSwipeRefresh()
         setupClicks()
-    }
-
-    private fun setupAdapter() {
-        //adapter = ResultAdapter(this)
     }
 
     private fun setupRecyclerView() {
