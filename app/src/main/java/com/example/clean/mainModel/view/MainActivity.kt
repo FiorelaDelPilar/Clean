@@ -19,11 +19,14 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity(), OnClickListener, MainView {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ResultAdapter
     private lateinit var presenter: MainPresenter
+
+    private val ds: DataSourceImpl by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainView {
             insets
         }
 
-        presenter = MainPresenterImpl(this, MainRepositoryImpl(DataSourceImpl()))
+        presenter = MainPresenterImpl(this, MainRepositoryImpl(ds))
         presenter.onCreate()
         setupAdapter()
         setupRecyclerView()
