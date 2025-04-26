@@ -20,13 +20,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : AppCompatActivity(), OnClickListener, MainView {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: ResultAdapter
-    private lateinit var presenter: MainPresenter
 
-    private val ds: DataSourceImpl by inject()
+    //private lateinit var adapter: ResultAdapter
+    private val adapter: ResultAdapter by inject { parametersOf(this) }
+    private lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainView {
             insets
         }
 
-        presenter = MainPresenterImpl(this, MainRepositoryImpl(ds))
+        presenter = MainPresenterImpl(this, MainRepositoryImpl(DataSourceImpl()))
         presenter.onCreate()
         setupAdapter()
         setupRecyclerView()
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainView {
     }
 
     private fun setupAdapter() {
-        adapter = ResultAdapter(this)
+        //adapter = ResultAdapter(this)
     }
 
     private fun setupRecyclerView() {

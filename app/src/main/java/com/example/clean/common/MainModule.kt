@@ -1,6 +1,7 @@
 package com.example.clean.common
 
-import com.example.clean.mainModel.model.DataSourceImpl
+import com.example.clean.mainModel.view.OnClickListener
+import com.example.clean.mainModel.view.ResultAdapter
 import org.koin.dsl.module
 
 /****
@@ -16,7 +17,8 @@ import org.koin.dsl.module
  * single va crear la instancia una sola vez y la mantendrá mientras la aplicación esté activa, mientras
  * que factory va crear las instancias siempre que se reqieran de forma separada y siempre que se requieran
  */
-val mainModule = module {
-    factory { DataSourceImpl() }
 
+
+val mainModule = module {
+    factory<ResultAdapter> { (listener: OnClickListener) -> ResultAdapter(listener) }
 }
